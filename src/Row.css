@@ -12,4 +12,20 @@
 
 .row__poster {
   max-height: 100px;
+  object-fit: contain;
+  margin-right: 10px;
+  transition: transform 450ms;
+}
+
+.row__posterLarge {
+  max-height: 250px;
+}
+
+.row__poster:hover {
+  transform: scale(1.07);
+  opacity: 1;
+}
+
+.row__posters::-webkit-scrollbar {
+  display: none;
 }

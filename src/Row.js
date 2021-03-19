@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Row.css";
 import axios from "./axios";
+import HorizontalScroll from "react-scroll-horizontal";
 function Row({ title, fetchUrl, isLargeRow = false }) {
   const [movies, setMovies] = useState([]);
 
@@ -19,8 +20,7 @@ function Row({ title, fetchUrl, isLargeRow = false }) {
   console.log(movies);
   return (
     <div className="row">
-      <h2>{title}</h2>
-
+      <h2>{title}</h2>{" "}
       <div className="row__posters">
         {movies.map((movie) => (
           <img
