@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Row.css";
 import axios from "./axios";
-import HorizontalScroll from "react-scroll-horizontal";
 function Row({ title, fetchUrl, isLargeRow = false }) {
   const [movies, setMovies] = useState([]);
 
