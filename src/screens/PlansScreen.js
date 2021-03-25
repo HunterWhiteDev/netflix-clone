@@ -1,3 +1,4 @@
+import { loadStripe } from "@stripe/stripe-js";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
@@ -6,25 +7,6 @@ import "./PlansScreen.css";
 function PlansScreen() {
   const [products, setProducts] = useState([]);
   const user = useSelector(selectUser);
-  const loadCheckout = async (priceId) => {
-    const docRef = await db
-      .collection("customers")
-      .doc(user.uid)
-      .collection("checkout__sessions")
-      .add({
-        price: priceId,
-        success__url: window.location.origin,
-        cancel_url: window.location.origin,
-      });
-
-    docRef.onSnapshot(async (snap) => {
-      const { error, sessionId } = snap.data();
-    });
-
-    if (sessionId) {
-      const stripe = await loadStripe("");
-    }
-  };
 
   useEffect(() => {
     db.collection("products")
@@ -45,6 +27,35 @@ function PlansScreen() {
         setProducts(products);
       });
   }, []);
+
+  const loadCheckout = async (priceId) => {
+    const docRef = await db
+      .collection("customers")
+      .doc(user.uid)
+      .collection("checkout__sessions")
+      .add({
+        price: priceId,
+        success_url: window.location.origin,
+        cancel_url: window.location.origin,
+      });
+    docRef.onSnapshot(async (snap) => {
+      const { sessionId, error } = snap.data();
+
+      if (error) {
+        alert(`An error occured ${error.message}`);
+      }
+
+      if (sessionId) {
+        //we have session
+        // init stripe
+
+        const stripe = await loadStripe(
+          "pk_test_51IYcDDKF1qUCljWu7O3PftoCir5XPIzLHYnMZit3peWGBguURw2dnuv5m0CTgh9I6FX3Evlm7PYMj5O6bwOsa8t900gQtIDEtl"
+        );
+        stripe.redirectToCheckout({ sessionId });
+      }
+    });
+  };
 
   console.log("this is products", products);
   return (
